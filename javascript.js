@@ -47,13 +47,17 @@ function playRound() {
 }
 
 function game() {
+
     let userScore = 0;
+
+    // Iterating through i until i becomes five. Allows the game to play the round five times.
     for (let i = 0; i < 5; i++) {
         if (playRound()) {
             ++userScore;
         };
         console.log(`You have won ${userScore} games`)
     }
+    
     alert(`After five games, you have won ${userScore}!`)
 }
 
