@@ -19,7 +19,7 @@ a {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 1130px;
+    height: 116vh;
 }
 
 
@@ -75,6 +75,7 @@ a {
 
 .gameplay-buttons {
     display: flex;
+    flex-flow: row wrap;
     gap: 4rem;
     padding: 3rem;
 }
@@ -106,6 +107,10 @@ a {
     transition: all 1s;
 }
 
+.outcome-description {
+    font-weight: 700;
+}
+
 .user-choice,
 .computer-choice {
     transform: rotate(1turn) scale(1.3);
@@ -122,6 +127,8 @@ a {
 .disabled-btn {
     opacity: 0.6;
     cursor: not-allowed;
+    transform: scale(0.8);
+    transition: all 1s;
 }
 
 /* Footer section */

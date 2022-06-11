@@ -68,7 +68,18 @@ const paperBtn = document.querySelector('#paper-btn');
 const scissorsBtn = document.querySelector('#scissors-btn');
 const playAgainBtn = document.querySelector('.gameplay-outcome button');
 
+const outcomeDiv = document.querySelector('.gameplay-outcome');
+const descriptionPara = document.querySelector('.outcome-description');
+const outcomePara = document.querySelector('.outcome-explanation');
+
+const winnerSpan = document.querySelector('.winner-span');
+const loserSpan = document.querySelector('.loser-span');
+
 const choiceArr = [rockBtn, paperBtn, scissorsBtn];
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
 
 function removeListeners() {
     rockBtn.removeEventListener('click', playRound);
@@ -77,9 +88,6 @@ function removeListeners() {
 };
 
 function disableBtns(userChoice, computerChoice) {
-    console.log(`User = ${userChoice}`)
-    console.log(`Computer = ${computerChoice}`)
-
     if (userChoice !== 'rock' && computerChoice !== 'rock') {
         rockBtn.classList.add('disabled-btn');
     };
@@ -91,33 +99,47 @@ function disableBtns(userChoice, computerChoice) {
     }
 }
 
+function playAgain() {
+    playAgainBtn.removeEventListener('click', playAgain);
+
+    rockBtn.classList.remove('disabled-btn');
+    paperBtn.classList.remove('disabled-btn');
+    scissorsBtn.classList.remove('disabled-btn');
+
+    outcomeDiv.style.visibility = 'hidden';
+    outcomePara.style.visibility = 'hidden';
+
+    startNewRound();
+}
+
 function displayResult(userChoice, computerChoice) {
-    const outcomeDiv = document.querySelector('.gameplay-outcome');
-    const descriptionPara = document.querySelector('.outcome-description');
-    const outcomePara = document.querySelector('.outcome-explanation');
     outcomeDiv.style.visibility = 'visible';
-
-
-    const winnerSpan = document.querySelector('.winner-span');
-    const loserSpan = document.querySelector('.loser-span');
+    outcomePara.style.visibility = 'visible';
 
     if (userChoice === computerChoice) {
         descriptionPara.textContent = 'It\'s a draw!';
         outcomePara.style.visibility = 'hidden';
     } else if (userChoice === 'rock' && computerChoice === 'scissors' || 
-            userChoice === 'paper' && computerChoice === 'rock' || 
-            userChoice === 'scissors' && computerChoice === 'paper'
-               ) {
-                console.log('you win!');
-                descriptionPara.textContent = 'You win!';
-                winnerSpan.textContent = `${userChoice.capitalize()}`;
-                loserSpan.textContent = `${computerChoice.capitalize()}`;
+        userChoice === 'paper' && computerChoice === 'rock' || 
+        userChoice === 'scissors' && computerChoice === 'paper'
+        ) {
+        descriptionPara.textContent = 'You win!';
+        winnerSpan.textContent = `${capitalize(userChoice)}`;
+        winnerSpan.style.color = '#00ADB5';
+        loserSpan.textContent = `${computerChoice}`;
+        loserSpan.style.color = '#FF2E63'
     } else if (userChoice === 'rock' && computerChoice === 'paper' || 
-            userChoice === 'paper' && computerChoice === 'scissors' || 
-            userChoice === 'scissors' && computerChoice === 'rock'
-            ) {
-                console.log('You lose!');
+        userChoice === 'paper' && computerChoice === 'scissors' || 
+        userChoice === 'scissors' && computerChoice === 'rock'
+        ) {
+        descriptionPara.textContent = 'You lose!';
+        winnerSpan.textContent = `${capitalize(computerChoice)}`;
+        winnerSpan.style.color = '#FF2E63'
+        loserSpan.textContent = `${userChoice}`
+        loserSpan.style.color = '#00ADB5';
     };
+
+    playAgainBtn.addEventListener('click', playAgain);
 
 };
 
@@ -125,8 +147,7 @@ function getComputerTurn(usersChoice) {
     const computerChoiceIndex = Math.floor(Math.random() * 3);
     const computerChoice = choiceArr[computerChoiceIndex];
     if (computerChoice === usersChoice) {
-        console.log('This is a draw');
-        computerChoice.style = 'transition: all 1s; transform: rotate(2turn) scale(1.3); background: linear-gradient(#00A8D5, #FF2E63)';
+        computerChoice.style = 'transition: all 1s; transform: rotate(1turn) scale(1.3); background: linear-gradient(#00A8D5, #FF2E63)';
     } else {
         computerChoice.style = 'transition: all 1s; transform: rotate(1turn) scale(1.3); background-color: #FF2E63';
     };
@@ -135,7 +156,6 @@ function getComputerTurn(usersChoice) {
 
 function playRound(e) {
     removeListeners();
-    console.log(this.id.split('-')[0]);
     this.style = 'transition: all 1s; transform: rotate(1turn) scale(1.3); background-color: #00ADB5;';
     let computerChoice = getComputerTurn(this);
     disableBtns(this.id.split('-')[0], computerChoice);
